@@ -8,8 +8,14 @@ const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME, DB_PORT } = process.env;
 const sequelize = new Sequelize(
   `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`,
   {
-    logging: false,
-    native: false,
+    logging: false, // Desactiva los logs de Sequelize
+    native: false, // No usa la biblioteca nativa de PostgreSQL
+    dialectOptions: {
+      ssl: NODE_ENV === "production" ? { // Habilita SSL solo en producción
+        require: true,
+        rejectUnauthorized: false,
+      } : false,
+    },
   }
 );
 
