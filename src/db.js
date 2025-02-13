@@ -3,7 +3,8 @@ const { Sequelize } = require("sequelize");
 
 const fs = require("fs");
 const path = require("path");
-const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME, DB_PORT, NODE_ENV } = process.env;
+const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME, DB_PORT, NODE_ENV } =
+  process.env;
 
 const sequelize = new Sequelize(
   `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`,
@@ -11,15 +12,21 @@ const sequelize = new Sequelize(
     logging: false, // Desactiva los logs de Sequelize
     native: false, // No usa la biblioteca nativa de PostgreSQL
     dialectOptions: {
-      ssl: NODE_ENV === "production" ? { // Habilita SSL solo en producción
-        require: true,
-        rejectUnauthorized: false,
-      } : false,
+      ssl:
+        NODE_ENV === "production"
+          ? {
+              // Habilita SSL solo en producción
+              require: true,
+              rejectUnauthorized: false,
+            }
+          : false,
     },
   }
 );
 
-// const sequelize = new Sequelize(DB_DEPLOY, {
+// const sequelize = new Sequelize(
+// `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`,
+//  {
 //   logging: false,
 //   native: false,
 // });
@@ -57,5 +64,4 @@ Activity.hasMany(Activity);
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
   conn: sequelize, // para importart la conexión { conn } = require('./db.js');
-  
 };
